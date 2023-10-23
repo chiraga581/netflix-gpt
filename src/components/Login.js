@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import { checkValidateData } from '../utils/validate';
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../utils/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
@@ -9,31 +12,72 @@ const Login = () => {
   // for updating error message 
   const [errorMessage , setErrorMessage] = useState(null)
 
-
-  const toggleSignInForm = () => {
-    setIsSignInForm(!isSignInForm)
-  }
+  const navigate = useNavigate();
 
 
-  // Validating email and password
-
+  // retrieving data from the form 
   const email = useRef(null)
   const password = useRef(null)
   const name = useRef(null)
 
+  //  toggle switch for changing form inplace
+  const toggleSignInForm = () => {
+    setIsSignInForm(!isSignInForm)
+  }
+
+  // Validating email and password
   const handleButtonClick = () => {
-    //  validate the form data 
-    console.log(email.current.value)
-    console.log(password.current.value)
-    
+    //  validate the form data
+
     const message = checkValidateData(email.current.value,password.current.value);
     setErrorMessage(message)
 
-    //  sign in / sign up
 
-  }
+    // check if it is valid or not 
 
+    if(message){
+      return ;
+    }
 
+    //  sign in / sign up Logic
+    if(!isSignInForm){
+      // sign up logic
+
+      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        console.log(user)
+        navigate("/browse")
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorCode  + errorMessage)
+        setIsSignInForm(!isSignInForm ) 
+
+      });
+
+    }
+    else{
+      // sign In logic
+      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user);
+        navigate("/browse");
+
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorMessage)
+        setIsSignInForm(!isSignInForm ) 
+      });
+    }
+
+  } 
 
   return (
     <div>
