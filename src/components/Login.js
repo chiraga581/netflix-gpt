@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react'
 import Header from './Header'
 import { checkValidateData } from '../utils/validate';
-import { createUserWithEmailAndPassword , signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 const Login = () => {
 
@@ -13,6 +15,7 @@ const Login = () => {
   const [errorMessage , setErrorMessage] = useState(null)
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
 
   // retrieving data from the form 
@@ -43,20 +46,40 @@ const Login = () => {
     if(!isSignInForm){
       // sign up logic
 
-      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
-      .then((userCredential) => {
-        // Signed up 
-        const user = userCredential.user;
-        console.log(user)
-        navigate("/browse")
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        setErrorMessage(errorCode  + errorMessage)
-        setIsSignInForm(!isSignInForm ) 
 
-      });
+
+      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then((userCredential) => {
+          // Signed up 
+          const user = userCredential.user;
+          updateProfile(auth.currentUser, {
+              displayName: name.current.value , 
+              photoURL: "https://example.com/jane-q-user/profile.jpg"
+            })
+              .then(() => {
+                const {uid, email, displayName , photoURL} = auth.currentUser;
+                dispatch(
+                  addUser({
+                    uid : uid,
+                    displayName: displayName,
+                    email: email,
+                    photoURL :photoURL,
+                  })
+                )
+                navigate("/browse")
+              }).catch((error) => {
+                setErrorMessage(error.message)
+              });
+          console.log(user)
+          navigate("/browse")
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode  + errorMessage)
+          setIsSignInForm(!isSignInForm ) 
+          
+        });
 
     }
     else{

@@ -12,6 +12,23 @@
 - Create Sign up in firebase (sign up user account)
 - Inmplemented sign up user api
 - created redux store with user slice
+- implemented sign out feature
+- update profile api call
+- fetch movies fron TMDB Api 
+- BugFix: Sign up user display name and profile picture update 
+- BugFix: If the user is not logged in redirect " /browse " to login page and vice versa 
+- Unsubscribed to the onAuthStateChanged call back
+- Add hard coded values to consgtant file
+- Register on TMDB site and create an API key and access token 
+- Go to TMDB documentation and search for the required api (Now playing in my application) and make an API call 
+- Get data from TMDB Now playing list 
+- Created custom hook for now playing movies 
+- created slice for movies and updated store with movie data 
+- Planing for main and secondary container 
+- fetch data for trailer video 
+- update store with trailer video data 
+- embeded the youtube video and make it autoplay and mute
+- Tailwind classes for main container  
 
 
 # Features 
