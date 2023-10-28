@@ -36,7 +36,13 @@
 - TMDB image cdn url 
 - UI improvements
 - usePopular movies custom hook 
- 
+- added upcoming movies and popular movies API
+- GPT Search feature 
+    - add link in  header 
+    - when user is present then only showing the option (only for logged in users)
+    - created gpt search bar 
+    - (Bonus) added multi lingual feature in gpt search page 
+    
 
 
 # Features 

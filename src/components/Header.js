@@ -4,12 +4,18 @@ import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser, removeUser } from '../utils/userSlice';
-import { LOGO } from '../utils/constants';
+import { LOGO, SUPPORTED_LANGUAGES } from '../utils/constants';
+import { toggleGptSearchView } from '../utils/gptSlice';
+import { changeLanguage } from '../utils/configSlice';
 
 const Header = () => {
-  const user = useSelector(store => store.user)
+  
+  const user = useSelector((store) => store.user)
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch)
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   const handleSignOut = () => {
     signOut(auth).then(() => {
       // Sign-out successful.
@@ -44,6 +50,16 @@ const Header = () => {
       }
     });
   },[])
+
+  const handleGptSearchClick = () => {
+      // toggle gpt search
+      dispatch(toggleGptSearchView());
+  }
+
+  const handleLanguageChange = (event) => {
+    dispatch(changeLanguage(event.target.value))
+  }
+
   return (
     <div className='absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-screen flex justify-between'>
         <img 
@@ -52,14 +68,29 @@ const Header = () => {
             alt='Logo'
         />
 
-        {user && <div className='flex flex-row p-2'>
-          <img 
-            className='w-12 h-12'
-            alt='user-image'
-            src={user?.photoURL}
-          />
-          <button onClick={handleSignOut} className='font-bold text-white px-2 '>(Sign Out)</button>
-        </div>}
+        {
+          
+          user && 
+            <div className='flex flex-row p-2 '>
+              {showGptSearch && <select className='p-2 text-white bg-inherit' onChange={handleLanguageChange}>
+                {
+                  SUPPORTED_LANGUAGES.map(lang => <option className='bg-black' key={lang.identifier} value={lang.identifier}>{lang.name}</option>)
+                }
+                
+              </select>}
+              <button className='py-2 px-4 mx-4 my-2 rounded-lg  text-white bg-gradient-to-br from-purple-800 to-red-700'
+                onClick={handleGptSearchClick}
+              >
+                {showGptSearch ? "Homepage":"GPT Search"}
+              </button>
+              <img
+                className='w-12 h-12'
+                alt='user-image'
+                src={user?.photoURL}
+              />
+              <button onClick={handleSignOut} className='font-bold text-white px-2 '>(Sign Out)</button>
+            </div>
+        }
     </div>
   )
 }

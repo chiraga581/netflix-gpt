@@ -9,7 +9,7 @@ const useMovieTrailer = (movieId) => {
     
     const dispatch = useDispatch();
     
-    const trailerVideo = useSelector(store => store.movies?.trailerVideo);
+    const trailerVideo = useSelector((store) => store.movies?.trailerVideo);
 
     const getMovieVideos = async () => {
 
