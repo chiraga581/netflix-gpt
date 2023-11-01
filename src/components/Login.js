@@ -95,13 +95,13 @@ const Login = () => {
   } 
 
   return (
-    <div>
+    <div >
         <Header />
-        <div className='absolute'>
+        <div className='absolute w-screen'>
           <img 
               src={BG_URL}
               alt='backgroundImage' 
-              />
+          />
         </div>
         <form 
           onSubmit={(e) => e.preventDefault()}

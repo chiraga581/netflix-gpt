@@ -7,7 +7,7 @@ const GptSearch = () => {
   return (
     <div>
 
-        <div className='absolute -z-10 w-screen '>
+        <div className='fixed -z-10 w-screen '>
           <img 
               src= {BG_URL}
               className='blur-md'
