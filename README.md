@@ -43,7 +43,14 @@
     - created gpt search bar 
     - (Bonus) added multi lingual feature in gpt search page 
     
-
+- GPT search open ai API key 
+- GPT search api call
+- fetched GPT movies suggestions from TMDB
+- gpt slice 
+- reused movies list component to make Movie suggention container 
+- memoization
+- added .env file and added it to git ignore 
+- made application responsive 
 
 # Features 
 - Login Sign up Page
